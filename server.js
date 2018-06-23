@@ -1,9 +1,47 @@
 'use strict';
 
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(express.static('static'));
+app.use(bodyParser.json());
+
+const validIssueStatus = {
+    New: true,
+    Open: true,
+    Assigned: true,
+    Fixed: true,
+    Verified: true,
+    Closed: true,
+};
+
+const issueFieldType = {
+    id: 'required',
+    status: 'required',
+    owner: 'required',
+    effort: 'required',
+    created: 'required',
+    completionDate: 'optional',
+    title: 'required',
+};
+
+function validateIssue(issue) {
+    for(const field in issueFieldType) {
+        const type = issueFieldType[field];
+        if (!type) {
+            delete issue[field];
+        } else if (type === 'required' && !issue[field]) {
+            return `${field} is required.`;
+        }
+
+        if (!validIssueStatus[issue.status]) {
+            return `${issue.status} is not a valid status.`;
+        }
+
+        return null;
+    }
+}
 
 const issues = [
     {
@@ -20,7 +58,7 @@ const issues = [
         status: 'Assigned',
         owner: 'Eddie',
         created: new Date('2016-08-16'),
-        effort: 14,
+        effort: 143,
         completionDate: new Date('2016-08-30'),
         title: 'Missing bottom border on panel',
     },
@@ -32,6 +70,24 @@ app.get('/api/issues', (req, res) => {
         _metadata: metadata,
         records: issues
     });
+});
+
+app.post('/api/issues', (req, res) => {
+    const newIssue = req.body;
+    newIssue.id = issues.length + 1;
+    newIssue.created = new Date();
+    if (!newIssue.status) {
+        newIssue.status = 'New';
+    }
+
+    const err = validateIssue(newIssue);
+    if (err) {
+        res.status(422).json({message: `Invalid request: ${err}`});
+        return;
+    }
+    issues.push(newIssue);
+
+    res.json(newIssue);
 });
 
 
