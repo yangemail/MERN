@@ -1,6 +1,6 @@
 'use strict';
 
-db = new Mongo().getDB('issuetracker');
+const db = new Mongo().getDB('issuetracker');
 
 db.issues.remove({});
 
