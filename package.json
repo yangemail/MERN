@@ -2,12 +2,12 @@
   "name": "mern",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "start": "nodemon -w server server/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "babel src --presets react,es2015 --out-dir static",
-    "watch": "webpack --watch"
+    "watch": "babel src --presets react --out-dir static --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
