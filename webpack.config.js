@@ -1,30 +1,14 @@
-const webpack = require('webpack');
-
 module.exports = {
-    // entry: {
-    //     app: './src/App.jsx',
-    //     vendor: ['react', 'react-dom', 'whatwg-fetch'],
-    // },
+    // entry: ['./src/App.jsx'],
     entry: {
-        entry: './src/App.jsx',
+        app: ['./src/App.jsx']
     },
     output: {
-        path: '/Users/yang.zhang/MERN/static',
-        filename: "app.bundle.js"
+        // path: './static',
+        path: __dirname + './static',
+        filename: 'app.bundle.js'
     },
-    // optimization: {
-    //     splitChunks: {
-    //         cacheGroups: {
-    //             vendor: {
-    //                 name: 'vendor',
-    //                 filename: 'vendor.bundle.js'
-    //             }
-    //         }
-    //     }
-    // },
-    // plugins: [
-    //     new webpack.optimize.CommonsChunkPlugin({name:'vendor', filename:'vendor.bundle.js'})
-    // ],
+    plugins: [],
     module: {
         rules: [
             {
@@ -33,7 +17,17 @@ module.exports = {
                 query: {
                     presets: ['react', 'es2015']
                 }
-            }
+            },
         ]
+    },
+    mode: "development",
+    devServer: {
+        port: 8000,
+        contentBase: 'static',
+        proxy: {
+            '/api/*': {
+                target: 'http://localhost:3000'
+            }
+        }
     }
-}
+};

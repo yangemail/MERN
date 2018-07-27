@@ -29,6 +29,6 @@ export default class IssueAdd extends React.Component {
                     <button>Add</button>
                 </form>
             </div>
-        );
+        )
     }
 }
