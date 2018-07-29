@@ -20,6 +20,7 @@ module.exports = {
             },
         ]
     },
+    devtool: 'source-map',
     mode: "development",
     devServer: {
         port: 8000,
